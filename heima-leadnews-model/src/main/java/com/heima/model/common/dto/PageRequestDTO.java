@@ -1,4 +1,4 @@
-package com.heima.model.common.dtos;
+package com.heima.model.common.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

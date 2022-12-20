@@ -80,3 +80,6 @@ buildNumber.properties
 .metadata
 node_modules
 node_modules/
+
+
+rebel.xml
