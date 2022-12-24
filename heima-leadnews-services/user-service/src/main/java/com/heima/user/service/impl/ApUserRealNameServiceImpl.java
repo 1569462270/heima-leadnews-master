@@ -21,6 +21,7 @@ import com.heima.model.wemedia.entity.WmUser;
 import com.heima.user.mapper.ApUserMapper;
 import com.heima.user.mapper.ApUserRealNameMapper;
 import com.heima.user.service.ApUserRealNameService;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class ApUserRealNameServiceImpl extends ServiceImpl<ApUserRealNameMapper,
      * @return {@code ResponseResult}
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @GlobalTransactional(rollbackFor = Exception.class)
     public ResponseResult updateStatusById(AuthDTO dto, Short status) {
         // 校验参数
         if (null == dto.getId()) {

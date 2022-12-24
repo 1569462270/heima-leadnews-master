@@ -1,6 +1,8 @@
 package com.heima.wemedia.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.heima.model.common.dto.ResponseResult;
+import com.heima.model.wemedia.dto.WmUserDTO;
 import com.heima.model.wemedia.entity.WmUser;
 
 /**
@@ -11,5 +13,11 @@ import com.heima.model.wemedia.entity.WmUser;
  */
 public interface WmUserService extends IService<WmUser> {
 
-
+    /**
+     * 登录
+     *
+     * @param dto dto
+     * @return {@code ResponseResult}
+     */
+    ResponseResult login(WmUserDTO dto);
 }
