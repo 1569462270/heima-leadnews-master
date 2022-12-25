@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Author : MR.wu
- * @Description : TODO
+ * @Description : 自媒体素材管理控制器
  * @Date : 2022/12/24 15:44
  * @Version : 1.0
  */

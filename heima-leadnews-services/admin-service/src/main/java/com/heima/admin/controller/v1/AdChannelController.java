@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author : MR.wu
  * @Description : 频道信息controller
@@ -69,5 +71,12 @@ public class AdChannelController {
     @GetMapping("/del/{id}")
     public ResponseResult delete(@PathVariable Integer id) {
         return adChannelService.deleteById(id);
+    }
+
+    @ApiOperation("查询全部频道")
+    @GetMapping("/channels")
+    public ResponseResult findAll() {
+        List<AdChannel> list = adChannelService.list();
+        return ResponseResult.okResult(list);
     }
 }

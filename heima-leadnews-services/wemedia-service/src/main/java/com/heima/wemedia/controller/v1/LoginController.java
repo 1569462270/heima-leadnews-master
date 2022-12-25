@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author : MR.wu
- * @Description : TODO
+ * @Description : 自媒体登录控制器
  * @Date : 2022/12/24 13:54
  * @Version : 1.0
  */
