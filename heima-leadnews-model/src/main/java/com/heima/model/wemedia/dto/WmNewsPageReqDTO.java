@@ -7,7 +7,7 @@ import java.util.Date;
 
 /**
  * @Author : MR.wu
- * @Description : TODO
+ * @Description : 自媒体文章dto
  * @Date : 2022/12/25 12:05
  * @Version : 1.0
  */

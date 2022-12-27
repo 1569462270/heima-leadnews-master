@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author : MR.wu
@@ -106,5 +107,15 @@ public class AdSensitiveServiceImpl extends ServiceImpl<AdSensitiveMapper, AdSen
         }
         removeById(id);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 查询敏感词内容列表
+     *
+     * @return {@code ResponseResult<List<String>>}
+     */
+    @Override
+    public ResponseResult<List<String>> selectAllSensitives() {
+        return ResponseResult.okResult(baseMapper.findAllSensitives());
     }
 }

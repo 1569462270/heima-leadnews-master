@@ -5,6 +5,8 @@ import com.heima.model.admin.dto.SensitiveDTO;
 import com.heima.model.admin.entity.AdSensitive;
 import com.heima.model.common.dto.ResponseResult;
 
+import java.util.List;
+
 /**
  * @Author : MR.wu
  * @Description : 敏感词信息service
@@ -44,4 +46,11 @@ public interface AdSensitiveService extends IService<AdSensitive> {
      * @return {@code ResponseResult}
      */
     ResponseResult delete(Integer id);
+
+    /**
+     * 查询敏感词内容列表
+     *
+     * @return {@code ResponseResult<List<String>>}
+     */
+    ResponseResult<List<String>> selectAllSensitives();
 }

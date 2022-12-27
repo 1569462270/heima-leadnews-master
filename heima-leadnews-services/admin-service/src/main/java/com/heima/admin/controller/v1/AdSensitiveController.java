@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author : MR.wu
  * @Description : 敏感词controller
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/v1/sensitive")
-@Api(value = "敏感词管理API",tags = "敏感词管理API")
+@Api(value = "敏感词管理API", tags = "敏感词管理API")
 public class AdSensitiveController {
     @Autowired
     private AdSensitiveService adSensitiveService;
@@ -44,5 +46,11 @@ public class AdSensitiveController {
     @DeleteMapping("/del/{id}")
     public ResponseResult delete(@PathVariable("id") Integer id) {
         return adSensitiveService.delete(id);
+    }
+
+    @ApiOperation(value = "查询敏感词内容list")
+    @PostMapping("/sensitives")
+    public ResponseResult sensitives() {
+        return adSensitiveService.selectAllSensitives();
     }
 }

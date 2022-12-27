@@ -1,6 +1,8 @@
 package com.heima.wemedia.controller.v1;
 
+import com.heima.common.constants.admin.WemediaConstants;
 import com.heima.model.common.dto.ResponseResult;
+import com.heima.model.wemedia.dto.NewsAuthDTO;
 import com.heima.model.wemedia.dto.WmNewsDTO;
 import com.heima.model.wemedia.dto.WmNewsPageReqDTO;
 import com.heima.wemedia.service.WmNewsService;
@@ -51,5 +53,31 @@ public class WmNewsController {
     @PostMapping("/down_or_up")
     public ResponseResult downOrUp(@RequestBody WmNewsDTO dto) {
         return wmNewsService.downOrUp(dto);
+    }
+
+    @PostMapping("/list_vo")
+    @ApiOperation(value = "查询文章列表")
+    public ResponseResult findList(@RequestBody NewsAuthDTO dto) {
+        return wmNewsService.findList(dto);
+    }
+
+
+    @ApiOperation(value = "查询自媒体文章详情", notes = "返回值带作者信息，主要运营管理端调用")
+    @GetMapping("/one_vo/{id}")
+    public ResponseResult findWmNewsVo(@PathVariable("id") Integer id) {
+        return wmNewsService.findWmNewsVo(id);
+    }
+
+
+    @ApiOperation("人工审核通过 状态:4")
+    @PostMapping("/auth_pass")
+    public ResponseResult authPass(@RequestBody NewsAuthDTO dto) {
+        return wmNewsService.updateStatus(WemediaConstants.WM_NEWS_AUTH_PASS, dto);
+    }
+
+    @ApiOperation("人工审核失败 状态:2")
+    @PostMapping("/auth_fail")
+    public ResponseResult authFail(@RequestBody NewsAuthDTO dto) {
+        return wmNewsService.updateStatus(WemediaConstants.WM_NEWS_AUTH_FAIL, dto);
     }
 }

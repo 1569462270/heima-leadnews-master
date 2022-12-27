@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heima.wemedia.mapper.WmNewsMapper">
+    <select id="findListAndPage" resultType="com.heima.model.wemedia.vo.WmNewsVO">
+        SELECT wn.*,
+               wu.name AS authorName
+        FROM wm_news wn
+                 LEFT JOIN wm_user wu ON wn.user_id = wu.id
+        <where>
+            <if test="dto.title != null and dto.title != ''">
+                AND wn.title LIKE #{dto.title}
+            </if>
+            <choose>
+                <when test="dto.status != null">
+                    AND wn.status = #{dto.status}
+                </when>
+                <otherwise>
+                    AND wn.status = 0
+                </otherwise>
+            </choose>
+        </where>
+        LIMIT #{dto.page}, #{dto.size}
+    </select>
+
+    <select id="findListCount" resultType="Long">
+        SELECT count(*)
+        FROM wm_news wn
+                 LEFT JOIN wm_user wu ON wn.user_id = wu.id
+        <where>
+            <if test="dto.title != null and dto.title != ''">
+                and wn.title like #{dto.title}
+            </if>
+            <choose>
+                <when test="dto.status != null">
+                    and wn.status = #{dto.status}
+                </when>
+                <otherwise>
+                    and wn.status != 0
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+</mapper>
