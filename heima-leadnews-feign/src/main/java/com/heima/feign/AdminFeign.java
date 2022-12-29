@@ -2,8 +2,11 @@ package com.heima.feign;
 
 import com.heima.config.HeimaFeignAutoConfiguration;
 import com.heima.feign.fallback.AdminFeignFallback;
+import com.heima.model.admin.entity.AdChannel;
 import com.heima.model.common.dto.ResponseResult;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -22,4 +25,7 @@ public interface AdminFeign {
 
     @PostMapping("/api/v1/sensitive/sensitives")
     ResponseResult<List<String>> sensitives();
+
+    @GetMapping("/api/v1/channel/one/{id}")
+    ResponseResult<AdChannel> findOne(@PathVariable Integer id);
 }

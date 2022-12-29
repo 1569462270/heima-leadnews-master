@@ -1,6 +1,7 @@
 package com.heima.feign.fallback;
 
 import com.heima.feign.AdminFeign;
+import com.heima.model.admin.entity.AdChannel;
 import com.heima.model.common.dto.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import feign.hystrix.FallbackFactory;
@@ -26,6 +27,13 @@ public class AdminFeignFallback implements FallbackFactory<AdminFeign> {
             @Override
             public ResponseResult<List<String>> sensitives() {
                 log.error("AdminFeign sensitives 远程调用出错啦 ~~~ !!!! {} ", throwable.getMessage());
+                return ResponseResult.errorResult(AppHttpCodeEnum.REMOTE_SERVER_ERROR);
+            }
+
+            @Override
+            public ResponseResult<AdChannel> findOne(Integer id) {
+                log.info("参数: {}", id);
+                log.error("AdminFeign findOne 远程调用出错啦 ~~~ !!!! {} ", throwable.getMessage());
                 return ResponseResult.errorResult(AppHttpCodeEnum.REMOTE_SERVER_ERROR);
             }
         };

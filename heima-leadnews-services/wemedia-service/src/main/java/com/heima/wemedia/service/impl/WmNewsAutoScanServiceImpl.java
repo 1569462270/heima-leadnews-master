@@ -3,6 +3,7 @@ package com.heima.wemedia.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.heima.aliyun.GreenImageScan;
 import com.heima.aliyun.GreenTextScan;
+import com.heima.common.constants.admin.PublishArticleConstants;
 import com.heima.common.constants.admin.WemediaConstants;
 import com.heima.common.exception.CustException;
 import com.heima.feign.AdminFeign;
@@ -12,17 +13,19 @@ import com.heima.model.wemedia.entity.WmNews;
 import com.heima.utils.common.SensitiveWordUtil;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.service.WmNewsAutoScanService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +51,9 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
 
     @Autowired
     private GreenImageScan greenImageScan;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     /**
      * 自动审核文章
@@ -92,8 +98,17 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
                 log.info("阿里云图片审核通过");
             }
             updateWmNews(wmNews, WmNews.Status.SUCCESS.getCode(), "审核成功");
-            // todo 通知定时发布文章
-
+            // 通知定时发布文章
+            // 发布时间
+            long publishTime = wmNews.getPublishTime().getTime();
+            // 当前时间
+            long now = new Date().getTime();
+            long remainTime = publishTime - now;
+            rabbitTemplate.convertAndSend(PublishArticleConstants.DELAY_DIRECT_EXCHANGE, PublishArticleConstants.PUBLISH_ARTICLE_ROUTE_KEY, wmNews.getId(), message -> {
+                message.getMessageProperties().setHeader("x-delay", remainTime <= 0 ? 0 : remainTime);
+                return message;
+            });
+            log.info("立即发布文章通知成功发送，文章id : {}", wmNews.getId());
         }
     }
 

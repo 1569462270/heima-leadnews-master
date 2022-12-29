@@ -3,12 +3,10 @@ package com.heima.feign;
 import com.heima.config.HeimaFeignAutoConfiguration;
 import com.heima.feign.fallback.WemediaFeignFallback;
 import com.heima.model.common.dto.ResponseResult;
+import com.heima.model.wemedia.entity.WmNews;
 import com.heima.model.wemedia.entity.WmUser;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author : MR.wu
@@ -28,4 +26,10 @@ public interface WemediaFeign {
 
     @GetMapping("/api/v1/user/findByName/{name}")
     ResponseResult<WmUser> findByName(@PathVariable("name") String name);
+
+    @GetMapping("/api/v1/news/one/{id}")
+    ResponseResult<WmNews> findWmNewsById(@PathVariable("id") Integer id);
+
+    @PutMapping("/api/v1/news/update")
+    ResponseResult updateWmNews(@RequestBody WmNews wmNews);
 }

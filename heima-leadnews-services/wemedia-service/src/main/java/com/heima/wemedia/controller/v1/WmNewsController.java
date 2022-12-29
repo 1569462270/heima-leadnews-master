@@ -5,6 +5,7 @@ import com.heima.model.common.dto.ResponseResult;
 import com.heima.model.wemedia.dto.NewsAuthDTO;
 import com.heima.model.wemedia.dto.WmNewsDTO;
 import com.heima.model.wemedia.dto.WmNewsPageReqDTO;
+import com.heima.model.wemedia.entity.WmNews;
 import com.heima.wemedia.service.WmNewsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,5 +80,12 @@ public class WmNewsController {
     @PostMapping("/auth_fail")
     public ResponseResult authFail(@RequestBody NewsAuthDTO dto) {
         return wmNewsService.updateStatus(WemediaConstants.WM_NEWS_AUTH_FAIL, dto);
+    }
+
+    @ApiOperation("根据id修改自媒体文章")
+    @PutMapping("/update")
+    public ResponseResult updateWmNews(@RequestBody WmNews wmNews) {
+        wmNewsService.updateById(wmNews);
+        return ResponseResult.okResult();
     }
 }
