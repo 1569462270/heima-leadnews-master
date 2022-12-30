@@ -2,7 +2,7 @@ package com.heima.feign;
 
 import com.heima.config.HeimaFeignAutoConfiguration;
 import com.heima.feign.fallback.ArticleFeignFallback;
-import com.heima.model.article.ApAuthor;
+import com.heima.model.article.entity.ApAuthor;
 import com.heima.model.common.dto.ResponseResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

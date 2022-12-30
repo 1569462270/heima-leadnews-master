@@ -1,4 +1,4 @@
-package com.heima.model.article;
+package com.heima.model.article.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

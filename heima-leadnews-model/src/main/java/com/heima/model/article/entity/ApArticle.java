@@ -1,4 +1,4 @@
-package com.heima.model.article;
+package com.heima.model.article.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -136,6 +136,6 @@ public class ApArticle {
 
 
     // 文章静态页 路径
-    @TableField(value = "static_url", exist = false)
+    @TableField(value = "static_url")
     private String staticUrl;
 }

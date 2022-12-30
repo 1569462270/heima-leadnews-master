@@ -1,7 +1,9 @@
 package com.heima.article.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.heima.model.article.ApArticle;
+import com.heima.model.article.dto.ArticleHomeDTO;
+import com.heima.model.article.entity.ApArticle;
+import com.heima.model.common.dto.ResponseResult;
 
 /**
  * @Author : MR.wu
@@ -17,4 +19,14 @@ public interface ApArticleService extends IService<ApArticle> {
      * @param newsId 文章id
      */
     void publishArticle(Integer newsId);
+
+
+    /**
+     * 加载文章列表
+     *
+     * @param loadType 0为加载更多  1为加载最新
+     * @param dto      dto
+     * @return {@code ResponseResult}
+     */
+    ResponseResult load(Short loadType, ArticleHomeDTO dto);
 }

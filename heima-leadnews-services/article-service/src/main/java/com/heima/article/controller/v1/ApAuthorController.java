@@ -2,7 +2,7 @@ package com.heima.article.controller.v1;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.article.service.ApAuthorService;
-import com.heima.model.article.ApAuthor;
+import com.heima.model.article.entity.ApAuthor;
 import com.heima.model.common.dto.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

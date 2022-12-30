@@ -1,7 +1,7 @@
 package com.heima.article.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.heima.model.article.ApAuthor;
+import com.heima.model.article.entity.ApAuthor;
 
 /**
  * @Author : MR.wu

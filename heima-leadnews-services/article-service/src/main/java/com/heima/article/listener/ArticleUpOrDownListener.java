@@ -3,7 +3,7 @@ package com.heima.article.listener;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.article.service.ApArticleConfigService;
 import com.heima.common.constants.admin.NewsUpOrDownConstants;
-import com.heima.model.article.ApArticleConfig;
+import com.heima.model.article.entity.ApArticleConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

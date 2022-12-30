@@ -7,23 +7,31 @@ import com.heima.article.mapper.ApArticleContentMapper;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.mapper.ApAuthorMapper;
 import com.heima.article.service.ApArticleService;
+import com.heima.article.service.GeneratePageService;
+import com.heima.common.constants.admin.ArticleConstants;
 import com.heima.common.exception.CustException;
 import com.heima.feign.AdminFeign;
 import com.heima.feign.WemediaFeign;
 import com.heima.model.admin.entity.AdChannel;
-import com.heima.model.article.ApArticle;
-import com.heima.model.article.ApArticleConfig;
-import com.heima.model.article.ApArticleContent;
-import com.heima.model.article.ApAuthor;
+import com.heima.model.article.dto.ArticleHomeDTO;
+import com.heima.model.article.entity.ApArticle;
+import com.heima.model.article.entity.ApArticleConfig;
+import com.heima.model.article.entity.ApArticleContent;
+import com.heima.model.article.entity.ApAuthor;
 import com.heima.model.common.dto.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.wemedia.entity.WmNews;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author : MR.wu
@@ -49,6 +57,17 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     @Autowired
     private ApArticleConfigMapper articleConfigMapper;
 
+    @Autowired
+    private ApArticleMapper apArticleMapper;
+    @Value("${file.oss.web-site}")
+    private String webSite;
+
+    @Value("${file.minio.readPath}")
+    private String readPath;
+
+    @Autowired
+    private GeneratePageService generatePageService;
+
 
     /**
      * 发表文章
@@ -66,7 +85,8 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         saveOrUpdateApArticle(apArticle);
         // 保存关联配置和内容信息
         saveConfigAndContent(wmNews, apArticle);
-        // todo 页面静态化
+        // 页面静态化
+        generatePageService.generateArticlePage(wmNews.getContent(), apArticle);
         // 修改文章状态
         updateWmNews(newsId, wmNews, apArticle);
         // todo 通知es索引库添加文章索引
@@ -205,5 +225,57 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             CustException.cust(AppHttpCodeEnum.DATA_NOT_ALLOW, "发布文章失败:自媒体文章状态错误");
         }
         return wmNews;
+    }
+
+    /**
+     * 加载文章列表
+     *
+     * @param loadType 0为加载更多  1为加载最新
+     * @param dto      dto
+     * @return {@code ResponseResult}
+     */
+    @Override
+    public ResponseResult load(Short loadType, ArticleHomeDTO dto) {
+        // 页大小
+        Integer size = dto.getSize();
+        if (size == null || size <= 0) {
+            size = 10;
+        }
+        dto.setSize(size);
+        // 频道
+        if (StringUtils.isBlank(dto.getTag())) {
+            dto.setTag(ArticleConstants.DEFAULT_TAG);
+        }
+        // 时间
+        if (dto.getMaxBehotTime() == null) {
+            dto.setMaxBehotTime(new Date());
+        }
+        if (dto.getMinBehotTime() == null) {
+            dto.setMinBehotTime(new Date());
+        }
+        // 类型判断
+        if (!loadType.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !loadType.equals(ArticleConstants.LOADTYPE_LOAD_NEW)) {
+            loadType = ArticleConstants.LOADTYPE_LOAD_MORE;
+        }
+        //2 执行查询
+        List<ApArticle> articleList = apArticleMapper.loadArticleList(dto, loadType);
+        for (ApArticle article : articleList) {
+            // 获取文章封面字段
+            String images = article.getImages();
+            if (StringUtils.isNotBlank(images)) {
+                // 将封面按照,号切割   生成流
+                images = Arrays.stream(images.split(","))
+                        // 每一个路径添加前缀
+                        .map(url -> webSite + url)
+                        // 将加了前缀的路径  拼接成字符串
+                        .collect(Collectors.joining(","));
+                article.setImages(images);
+            }
+
+            article.setStaticUrl(readPath + article.getStaticUrl());
+        }
+        //3 返回结果
+        ResponseResult result = ResponseResult.okResult(articleList);
+        return result;
     }
 }

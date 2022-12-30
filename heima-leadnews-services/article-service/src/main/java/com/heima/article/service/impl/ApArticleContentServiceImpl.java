@@ -3,7 +3,7 @@ package com.heima.article.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.article.mapper.ApArticleContentMapper;
 import com.heima.article.service.ApArticleContentService;
-import com.heima.model.article.ApArticleContent;
+import com.heima.model.article.entity.ApArticleContent;
 import org.springframework.stereotype.Service;
 
 /**

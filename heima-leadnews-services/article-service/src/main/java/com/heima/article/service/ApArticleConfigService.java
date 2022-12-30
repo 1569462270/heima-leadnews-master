@@ -1,7 +1,7 @@
 package com.heima.article.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.heima.model.article.ApArticleConfig;
+import com.heima.model.article.entity.ApArticleConfig;
 
 /**
  * @Author : MR.wu

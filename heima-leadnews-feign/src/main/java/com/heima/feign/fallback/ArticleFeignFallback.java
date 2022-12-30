@@ -1,7 +1,7 @@
 package com.heima.feign.fallback;
 
 import com.heima.feign.ArticleFeign;
-import com.heima.model.article.ApAuthor;
+import com.heima.model.article.entity.ApAuthor;
 import com.heima.model.common.dto.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import feign.hystrix.FallbackFactory;
